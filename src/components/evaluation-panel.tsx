@@ -106,72 +106,71 @@ export function EvaluationPanel({ type, data, history }: Props) {
                     <Settings2 className="h-3 w-3 mr-1" /> Adjust Thresholds
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-[90vw] w-[700px] max-h-[85vh] overflow-y-auto p-6">
+                <DialogContent className="max-h-[85vh] overflow-y-auto p-5">
                   <DialogHeader>
                     <DialogTitle className="text-base">Threshold Configuration — {type.toUpperCase()}</DialogTitle>
                   </DialogHeader>
-                  <p className="text-xs text-muted-foreground mt-1 mb-4">
-                    Adjust the acceptable ranges for each sensor. Values outside the normal range show as warnings.
-                    Values outside the critical range show as critical alerts.
+                  <p className="text-xs text-muted-foreground mt-1 mb-3">
+                    Adjust acceptable ranges per sensor. Values outside normal = warning, outside critical = alert.
                   </p>
-                  <div className="space-y-2">
-                    {/* Header */}
-                    <div className="grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 px-1 pb-2 border-b border-border/50">
-                      <span className="text-xs font-medium text-muted-foreground">Sensor</span>
-                      <span className="text-xs font-medium text-center text-red-400">Crit Min</span>
-                      <span className="text-xs font-medium text-center text-emerald-500">Normal Min</span>
-                      <span className="text-xs font-medium text-center text-emerald-500">Normal Max</span>
-                      <span className="text-xs font-medium text-center text-red-400">Crit Max</span>
-                    </div>
-                    {/* Rows */}
+                  <div className="space-y-3">
                     {eqThresholds.map((t, i) => (
                       <div
                         key={t.key}
-                        className={`grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 items-center px-1 py-2 rounded-md ${
-                          i % 2 === 0 ? 'bg-muted/30' : ''
-                        }`}
+                        className={`rounded-lg p-3 ${i % 2 === 0 ? 'bg-muted/30' : 'bg-muted/10'}`}
                       >
-                        <div>
-                          <span className="text-sm font-medium">{t.label}</span>
-                          <span className="text-xs text-muted-foreground ml-1">({t.unit})</span>
+                        <p className="text-sm font-medium mb-2">
+                          {t.label} <span className="text-muted-foreground text-xs">({t.unit})</span>
+                        </p>
+                        <div className="grid grid-cols-4 gap-2">
+                          <div>
+                            <label className="text-[10px] text-red-400 mb-0.5 block">Crit Min</label>
+                            <Input
+                              type="number"
+                              step="any"
+                              className="h-8 text-xs text-center"
+                              value={t.criticalMin ?? ''}
+                              placeholder="—"
+                              onChange={(e) => updateThreshold(t.key, 'criticalMin', Number(e.target.value))}
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-emerald-500 mb-0.5 block">Normal Min</label>
+                            <Input
+                              type="number"
+                              step="any"
+                              className="h-8 text-xs text-center"
+                              value={t.min}
+                              onChange={(e) => updateThreshold(t.key, 'min', Number(e.target.value))}
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-emerald-500 mb-0.5 block">Normal Max</label>
+                            <Input
+                              type="number"
+                              step="any"
+                              className="h-8 text-xs text-center"
+                              value={t.max}
+                              onChange={(e) => updateThreshold(t.key, 'max', Number(e.target.value))}
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-red-400 mb-0.5 block">Crit Max</label>
+                            <Input
+                              type="number"
+                              step="any"
+                              className="h-8 text-xs text-center"
+                              value={t.criticalMax ?? ''}
+                              placeholder="—"
+                              onChange={(e) => updateThreshold(t.key, 'criticalMax', Number(e.target.value))}
+                            />
+                          </div>
                         </div>
-                        <Input
-                          type="number"
-                          step="any"
-                          className="h-8 text-xs text-center"
-                          value={t.criticalMin ?? ''}
-                          placeholder="—"
-                          onChange={(e) => updateThreshold(t.key, 'criticalMin', Number(e.target.value))}
-                        />
-                        <Input
-                          type="number"
-                          step="any"
-                          className="h-8 text-xs text-center"
-                          value={t.min}
-                          onChange={(e) => updateThreshold(t.key, 'min', Number(e.target.value))}
-                        />
-                        <Input
-                          type="number"
-                          step="any"
-                          className="h-8 text-xs text-center"
-                          value={t.max}
-                          onChange={(e) => updateThreshold(t.key, 'max', Number(e.target.value))}
-                        />
-                        <Input
-                          type="number"
-                          step="any"
-                          className="h-8 text-xs text-center"
-                          value={t.criticalMax ?? ''}
-                          placeholder="—"
-                          onChange={(e) => updateThreshold(t.key, 'criticalMax', Number(e.target.value))}
-                        />
                       </div>
                     ))}
                   </div>
-                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
-                    <p className="text-[10px] text-muted-foreground">
-                      Changes are saved automatically to local storage.
-                    </p>
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/50">
+                    <p className="text-[10px] text-muted-foreground">Auto-saved to local storage</p>
                     <Button variant="outline" size="sm" onClick={resetThresholds} className="text-xs">
                       Reset to Defaults
                     </Button>
