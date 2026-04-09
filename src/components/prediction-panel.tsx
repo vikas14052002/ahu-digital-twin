@@ -113,7 +113,6 @@ export function PredictionPanel({ history, thresholds }: Props) {
         const { slope, intercept } = linearRegression(values);
 
         // Predict 30 minutes ahead (900 readings at 2sec interval)
-        const futureReadings = 900 / readingInterval * 30; // not right, let me fix
         const stepsAhead = (30 * 60) / readingInterval; // 30 min / 2 sec = 900 steps
         const predictedValue = +(intercept + slope * (values.length - 1 + stepsAhead)).toFixed(2);
 
