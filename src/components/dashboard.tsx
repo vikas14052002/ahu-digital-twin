@@ -27,14 +27,11 @@ import { useEquipmentData } from '@/hooks/use-equipment-data';
 import { equipment } from '@/data/equipment';
 import type { AnySensors } from '@/data/equipment-sensors';
 import { SensorCard } from './sensor-card';
-import { DataChart } from './temperature-chart';
-import { AlertsPanel } from './alerts-panel';
 import { SensorTable } from './sensor-table';
-import { EquipmentSchematic, sensorCards, chartTabs } from './schematics';
+import { EquipmentSchematic, sensorCards } from './schematics';
 import { EvaluationPanel } from './evaluation-panel';
+import { ThresholdChart } from './threshold-chart';
 import { defaultThresholds } from '@/data/thresholds';
-import { checkAlerts } from '@/data/mock-data';
-import type { Alert } from '@/data/mock-data';
 
 type EquipType = 'ahu' | 'chiller' | 'cooling-tower' | 'boiler' | 'vav' | 'fcu';
 
@@ -60,19 +57,9 @@ export function Dashboard() {
 
   const { current, history, isPaused, togglePause } = useEquipmentData(eType, 2000);
   const [selectedSnapshot, setSelectedSnapshot] = useState<AnySensors | null>(null);
-  const [alerts, setAlerts] = useState<Alert[]>([]);
-
-  // Only check alerts for AHU (others don't have the same fields)
-  if (eType === 'ahu' && !isPaused) {
-    const newAlerts = checkAlerts(current as never);
-    if (newAlerts.length > 0 && alerts.length < 20) {
-      // side-effect in render is fine for this demo
-    }
-  }
 
   const activeData = selectedSnapshot ?? current;
   const cards = sensorCards[eType] ?? sensorCards.ahu;
-  const tabs = chartTabs[eType] ?? chartTabs.ahu;
 
   return (
     <div className="min-h-screen bg-background">
@@ -183,39 +170,23 @@ export function Dashboard() {
         />
 
         {/* Tabs */}
-        <Tabs defaultValue={tabs[0]?.label ?? 'default'} className="w-full">
+        <Tabs defaultValue="trends" className="w-full">
           <TabsList className="bg-muted/50">
-            {tabs.map((tab) => (
-              <TabsTrigger key={tab.label} value={tab.label}>{tab.label}</TabsTrigger>
-            ))}
+            <TabsTrigger value="trends">Trends</TabsTrigger>
             <TabsTrigger value="raw-data">Raw Data (ClickHouse)</TabsTrigger>
           </TabsList>
 
-          {tabs.map((tab) => (
-            <TabsContent key={tab.label} value={tab.label} className="mt-3">
-              <div className={`grid grid-cols-1 ${tab.charts.length > 1 ? 'lg:grid-cols-2' : 'lg:grid-cols-3'} gap-3`}>
-                {tab.charts.map((chart) => (
-                  <div key={chart.title} className={tab.charts.length === 1 ? 'lg:col-span-2' : ''}>
-                    <DataChart
-                      data={history as unknown as Record<string, number>[]}
-                      title={chart.title}
-                      unit={chart.unit}
-                      yDomain={chart.yDomain}
-                      lines={chart.lines as { key: never; label: string; color: string }[]}
-                    />
-                  </div>
-                ))}
-                {tab.charts.length === 1 && eType === 'ahu' && (
-                  <AlertsPanel alerts={alerts} onClear={() => setAlerts([])} />
-                )}
-              </div>
-            </TabsContent>
-          ))}
+          <TabsContent value="trends" className="mt-3">
+            <ThresholdChart
+              data={history as unknown as Record<string, number>[]}
+              thresholds={defaultThresholds[eType] ?? []}
+            />
+          </TabsContent>
 
           <TabsContent value="raw-data" className="mt-3">
             <SensorTable
-              data={history as unknown as unknown as Record<string, number>[]}
-              selectedTimestamp={(selectedSnapshot as unknown as unknown as Record<string, number> | null)?.timestamp ?? null}
+              data={history as unknown as Record<string, number>[]}
+              selectedTimestamp={(selectedSnapshot as unknown as Record<string, number> | null)?.timestamp ?? null}
               onRowSelect={(row) => setSelectedSnapshot(row as unknown as AnySensors)}
               thresholds={defaultThresholds[eType]}
             />
