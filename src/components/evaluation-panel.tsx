@@ -106,78 +106,75 @@ export function EvaluationPanel({ type, data, history }: Props) {
                     <Settings2 className="h-3 w-3 mr-1" /> Adjust Thresholds
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                <DialogContent className="max-w-[90vw] w-[700px] max-h-[85vh] overflow-y-auto p-6">
                   <DialogHeader>
-                    <DialogTitle>Threshold Configuration — {type.toUpperCase()}</DialogTitle>
+                    <DialogTitle className="text-base">Threshold Configuration — {type.toUpperCase()}</DialogTitle>
                   </DialogHeader>
-                  <div className="space-y-3 mt-2">
-                    <p className="text-xs text-muted-foreground">
-                      Adjust the acceptable ranges for each sensor. Values outside the normal range show as warnings.
-                      Values outside the critical range show as critical alerts.
-                    </p>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="text-xs">Sensor</TableHead>
-                          <TableHead className="text-xs text-center">Crit Min</TableHead>
-                          <TableHead className="text-xs text-center">Normal Min</TableHead>
-                          <TableHead className="text-xs text-center">Normal Max</TableHead>
-                          <TableHead className="text-xs text-center">Crit Max</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {eqThresholds.map((t) => (
-                          <TableRow key={t.key}>
-                            <TableCell className="text-xs font-medium">
-                              {t.label} <span className="text-muted-foreground">({t.unit})</span>
-                            </TableCell>
-                            <TableCell>
-                              <Input
-                                type="number"
-                                step="any"
-                                className="h-7 w-20 text-xs text-center"
-                                value={t.criticalMin ?? ''}
-                                placeholder="—"
-                                onChange={(e) => updateThreshold(t.key, 'criticalMin', Number(e.target.value))}
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <Input
-                                type="number"
-                                step="any"
-                                className="h-7 w-20 text-xs text-center"
-                                value={t.min}
-                                onChange={(e) => updateThreshold(t.key, 'min', Number(e.target.value))}
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <Input
-                                type="number"
-                                step="any"
-                                className="h-7 w-20 text-xs text-center"
-                                value={t.max}
-                                onChange={(e) => updateThreshold(t.key, 'max', Number(e.target.value))}
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <Input
-                                type="number"
-                                step="any"
-                                className="h-7 w-20 text-xs text-center"
-                                value={t.criticalMax ?? ''}
-                                placeholder="—"
-                                onChange={(e) => updateThreshold(t.key, 'criticalMax', Number(e.target.value))}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                    <div className="flex justify-end">
-                      <Button variant="outline" size="sm" onClick={resetThresholds} className="text-xs">
-                        Reset to Defaults
-                      </Button>
+                  <p className="text-xs text-muted-foreground mt-1 mb-4">
+                    Adjust the acceptable ranges for each sensor. Values outside the normal range show as warnings.
+                    Values outside the critical range show as critical alerts.
+                  </p>
+                  <div className="space-y-2">
+                    {/* Header */}
+                    <div className="grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 px-1 pb-2 border-b border-border/50">
+                      <span className="text-xs font-medium text-muted-foreground">Sensor</span>
+                      <span className="text-xs font-medium text-center text-red-400">Crit Min</span>
+                      <span className="text-xs font-medium text-center text-emerald-500">Normal Min</span>
+                      <span className="text-xs font-medium text-center text-emerald-500">Normal Max</span>
+                      <span className="text-xs font-medium text-center text-red-400">Crit Max</span>
                     </div>
+                    {/* Rows */}
+                    {eqThresholds.map((t, i) => (
+                      <div
+                        key={t.key}
+                        className={`grid grid-cols-[1fr_80px_80px_80px_80px] gap-2 items-center px-1 py-2 rounded-md ${
+                          i % 2 === 0 ? 'bg-muted/30' : ''
+                        }`}
+                      >
+                        <div>
+                          <span className="text-sm font-medium">{t.label}</span>
+                          <span className="text-xs text-muted-foreground ml-1">({t.unit})</span>
+                        </div>
+                        <Input
+                          type="number"
+                          step="any"
+                          className="h-8 text-xs text-center"
+                          value={t.criticalMin ?? ''}
+                          placeholder="—"
+                          onChange={(e) => updateThreshold(t.key, 'criticalMin', Number(e.target.value))}
+                        />
+                        <Input
+                          type="number"
+                          step="any"
+                          className="h-8 text-xs text-center"
+                          value={t.min}
+                          onChange={(e) => updateThreshold(t.key, 'min', Number(e.target.value))}
+                        />
+                        <Input
+                          type="number"
+                          step="any"
+                          className="h-8 text-xs text-center"
+                          value={t.max}
+                          onChange={(e) => updateThreshold(t.key, 'max', Number(e.target.value))}
+                        />
+                        <Input
+                          type="number"
+                          step="any"
+                          className="h-8 text-xs text-center"
+                          value={t.criticalMax ?? ''}
+                          placeholder="—"
+                          onChange={(e) => updateThreshold(t.key, 'criticalMax', Number(e.target.value))}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
+                    <p className="text-[10px] text-muted-foreground">
+                      Changes are saved automatically to local storage.
+                    </p>
+                    <Button variant="outline" size="sm" onClick={resetThresholds} className="text-xs">
+                      Reset to Defaults
+                    </Button>
                   </div>
                 </DialogContent>
               </Dialog>
