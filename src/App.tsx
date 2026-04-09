@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { Home } from '@/components/home';
 import { Dashboard } from '@/components/dashboard';
 import { ThemeCtx, useThemeProvider } from '@/hooks/use-theme';
@@ -8,12 +8,12 @@ function App() {
 
   return (
     <ThemeCtx.Provider value={themeCtx}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/monitor/:id" element={<Dashboard />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </ThemeCtx.Provider>
   );
 }
