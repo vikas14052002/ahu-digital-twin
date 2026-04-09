@@ -167,7 +167,7 @@ export function ThresholdChart({ data, thresholds }: Props) {
                 fontSize: '12px',
               }}
               formatter={(value) => [
-                `${Number.isInteger(value) ? value : value.toFixed(2)} ${threshold?.unit ?? ''}`,
+                `${value} ${threshold?.unit ?? ''}`,
                 threshold?.label ?? selectedKey,
               ]}
             />
