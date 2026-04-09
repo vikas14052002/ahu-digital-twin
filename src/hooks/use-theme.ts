@@ -15,7 +15,7 @@ export const ThemeCtx = createContext<ThemeContext>({
 export function useThemeProvider(): ThemeContext {
   const [theme, setTheme] = useState<Theme>(() => {
     const stored = localStorage.getItem('ahu-theme');
-    return (stored as Theme) ?? 'dark';
+    return (stored as Theme) ?? 'light';
   });
 
   useEffect(() => {
