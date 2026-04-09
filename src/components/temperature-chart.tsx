@@ -61,7 +61,7 @@ export function DataChart({ data, title, lines, yDomain, unit = '' }: Props) {
                 borderRadius: '8px',
                 fontSize: '12px',
               }}
-              formatter={(value: number) => [`${value}${unit}`, '']}
+              formatter={(value) => [`${value}${unit}`, '']}
             />
             <Legend
               iconType="line"

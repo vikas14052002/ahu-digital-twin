@@ -214,9 +214,9 @@ export function Dashboard() {
 
           <TabsContent value="raw-data" className="mt-3">
             <SensorTable
-              data={history as Record<string, number>[]}
-              selectedTimestamp={(selectedSnapshot as Record<string, number> | null)?.timestamp ?? null}
-              onRowSelect={(row) => setSelectedSnapshot(row as AnySensors)}
+              data={history as unknown as Record<string, number>[]}
+              selectedTimestamp={(selectedSnapshot as unknown as Record<string, number> | null)?.timestamp ?? null}
+              onRowSelect={(row) => setSelectedSnapshot(row as unknown as AnySensors)}
               thresholds={defaultThresholds[eType]}
             />
           </TabsContent>

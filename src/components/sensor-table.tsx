@@ -174,7 +174,7 @@ export function SensorTable({ data, selectedTimestamp, onRowSelect, thresholds =
       {/* Controls */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
-          <Select value={filterCol} onValueChange={setFilterCol}>
+          <Select value={filterCol} onValueChange={(v) => v && setFilterCol(v)}>
             <SelectTrigger className="h-8 w-[180px] text-xs"><SelectValue placeholder="Filter columns" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All columns</SelectItem>
@@ -183,7 +183,7 @@ export function SensorTable({ data, selectedTimestamp, onRowSelect, thresholds =
               ))}
             </SelectContent>
           </Select>
-          <Select value={String(pageSize)} onValueChange={(v) => { setPageSize(Number(v)); setPage(0); }}>
+          <Select value={String(pageSize)} onValueChange={(v) => { if (v) { setPageSize(Number(v)); setPage(0); } }}>
             <SelectTrigger className="h-8 w-[100px] text-xs"><SelectValue /></SelectTrigger>
             <SelectContent>
               {PAGE_SIZES.map((s) => <SelectItem key={s} value={String(s)}>{s} rows</SelectItem>)}
