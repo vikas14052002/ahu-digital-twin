@@ -154,7 +154,7 @@ export function Dashboard() {
         {/* Sensor Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
           {cards.map((card) => {
-            const val = (activeData as Record<string, number>)[card.key];
+            const val = (activeData as unknown as Record<string, number>)[card.key];
             const Icon = iconMap[card.icon] ?? Gauge;
             return (
               <SensorCard
@@ -178,8 +178,8 @@ export function Dashboard() {
         {/* Evaluation */}
         <EvaluationPanel
           type={eType}
-          data={activeData as Record<string, number>}
-          history={history as Record<string, number>[]}
+          data={activeData as unknown as Record<string, number>}
+          history={history as unknown as Record<string, number>[]}
         />
 
         {/* Tabs */}
@@ -197,7 +197,7 @@ export function Dashboard() {
                 {tab.charts.map((chart) => (
                   <div key={chart.title} className={tab.charts.length === 1 ? 'lg:col-span-2' : ''}>
                     <DataChart
-                      data={history as Record<string, number>[]}
+                      data={history as unknown as Record<string, number>[]}
                       title={chart.title}
                       unit={chart.unit}
                       yDomain={chart.yDomain}
@@ -214,8 +214,8 @@ export function Dashboard() {
 
           <TabsContent value="raw-data" className="mt-3">
             <SensorTable
-              data={history as unknown as Record<string, number>[]}
-              selectedTimestamp={(selectedSnapshot as unknown as Record<string, number> | null)?.timestamp ?? null}
+              data={history as unknown as unknown as Record<string, number>[]}
+              selectedTimestamp={(selectedSnapshot as unknown as unknown as Record<string, number> | null)?.timestamp ?? null}
               onRowSelect={(row) => setSelectedSnapshot(row as unknown as AnySensors)}
               thresholds={defaultThresholds[eType]}
             />

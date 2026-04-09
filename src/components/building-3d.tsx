@@ -401,11 +401,9 @@ function DuctLines() {
         const curve = new THREE.QuadraticBezierCurve3(duct.from, mid, duct.to);
         const pts = curve.getPoints(30);
         const geo = new THREE.BufferGeometry().setFromPoints(pts);
-        return (
-          <line key={i} geometry={geo}>
-            <lineBasicMaterial color={duct.color} transparent opacity={0.3} />
-          </line>
-        );
+        const mat = new THREE.LineBasicMaterial({ color: duct.color, transparent: true, opacity: 0.3 });
+        const line = new THREE.Line(geo, mat);
+        return <primitive key={i} object={line} />;
       })}
     </>
   );
