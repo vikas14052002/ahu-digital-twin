@@ -8,9 +8,6 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog';
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from '@/components/ui/table';
-import {
   CheckCircle2, AlertTriangle, XCircle, Settings2, Shield, TrendingDown, TrendingUp,
 } from 'lucide-react';
 import {

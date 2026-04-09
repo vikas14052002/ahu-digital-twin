@@ -2,8 +2,6 @@ import { useState, useMemo } from 'react';
 import {
   AreaChart,
   Area,
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -29,9 +27,6 @@ interface Props {
   data: Row[];
   thresholds: Threshold[];
 }
-
-const snakeCase = (s: string) =>
-  s.replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, '');
 
 export function ThresholdChart({ data, thresholds }: Props) {
   const [selectedKey, setSelectedKey] = useState(thresholds[0]?.key ?? '');
@@ -171,7 +166,7 @@ export function ThresholdChart({ data, thresholds }: Props) {
                 borderRadius: '8px',
                 fontSize: '12px',
               }}
-              formatter={(value: number) => [
+              formatter={(value) => [
                 `${Number.isInteger(value) ? value : value.toFixed(2)} ${threshold?.unit ?? ''}`,
                 threshold?.label ?? selectedKey,
               ]}
