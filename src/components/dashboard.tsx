@@ -31,6 +31,7 @@ import { SensorTable } from './sensor-table';
 import { EquipmentSchematic, sensorCards } from './schematics';
 import { EvaluationPanel } from './evaluation-panel';
 import { ThresholdChart } from './threshold-chart';
+import { PredictionPanel } from './prediction-panel';
 import { defaultThresholds } from '@/data/thresholds';
 
 type EquipType = 'ahu' | 'chiller' | 'cooling-tower' | 'boiler' | 'vav' | 'fcu';
@@ -167,6 +168,12 @@ export function Dashboard() {
           type={eType}
           data={activeData as unknown as Record<string, number>}
           history={history as unknown as Record<string, number>[]}
+        />
+
+        {/* Prediction */}
+        <PredictionPanel
+          history={history as unknown as Record<string, number>[]}
+          thresholds={defaultThresholds[eType] ?? []}
         />
 
         {/* Tabs */}
